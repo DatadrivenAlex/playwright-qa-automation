@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} · Harbor Market</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="top">
+    <div class="brand-block">
+      <a class="brand" href="{% if user %}/catalog{% else %}/{% endif %}" data-testid="brand">Harbor Market</a>
+      <p class="tagline">Desk goods, packed by hand.</p>
+    </div>
+    <nav class="nav" aria-label="Shop">
+      {% if user %}
+        <span data-testid="greeting">Hello, {{ user.display_name }}</span>
+        <a href="/cart" data-testid="cart-link">Cart <span data-testid="cart-count">{{ cart_count }}</span></a>
+        <form method="post" action="/logout">
+          <button type="submit" class="text-button" data-testid="logout">Log out</button>
+        </form>
+      {% else %}
+        <a href="/catalog" data-testid="catalog-link">Catalog</a>
+        <a href="/login" data-testid="login-link">Log in</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main id="content">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">The shelf</p>
+  <h1>Catalog</h1>
+</section>
+{% if flash %}
+  <p class="flash flash-{{ flash_kind }}" data-testid="flash" role="status">{{ flash }}</p>
+{% endif %}
+<ul class="product-grid">
+  {% for product in products %}
+    <li>
+      <article class="product card" data-testid="product-card" data-product-id="{{ product.id }}">
+        <h2 data-testid="product-name">{{ product.name }}</h2>
+        <p class="price" data-testid="product-price">{{ product.price }}</p>
+        <p class="blurb">{{ product.blurb }}</p>
+        <form method="post" action="/cart/items" class="add-form">
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <label for="quantity-{{ product.id }}">Qty</label>
+          <input id="quantity-{{ product.id }}" type="number" name="quantity" value="1" min="1" max="10" data-testid="quantity-{{ product.id }}">
+          <button type="submit" data-testid="add-{{ product.id }}">Add to cart</button>
+        </form>
+      </article>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
