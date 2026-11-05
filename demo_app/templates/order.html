@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+{% if order %}
+  <section class="page-head">
+    <p class="eyebrow">Confirmed</p>
+    <h1>Order placed</h1>
+  </section>
+  <article class="card order">
+    <p>Order <strong data-testid="order-number">{{ order.id }}</strong></p>
+    <p>Status <strong data-testid="order-status">{{ order.status }}</strong></p>
+    <p>Total <strong data-testid="order-total">{{ order.total }}</strong></p>
+    <p data-testid="order-ship-to">{{ order.full_name }}, {{ order.address }}, {{ order.city }} {{ order.postal_code }}</p>
+    <ul>
+      {% for item in order["items"] %}
+        <li data-testid="order-line">{{ item.name }} × {{ item.quantity }}</li>
+      {% endfor %}
+    </ul>
+    <a class="button" href="/catalog">Continue browsing</a>
+  </article>
+{% else %}
+  <section class="card empty" data-testid="order-missing">
+    <h1>Order not found</h1>
+    <p>That order is not on this account.</p>
+  </section>
+{% endif %}
+{% endblock %}

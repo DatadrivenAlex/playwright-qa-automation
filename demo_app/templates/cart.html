@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Your selection</p>
+  <h1>Cart</h1>
+</section>
+{% if flash %}
+  <p class="flash flash-{{ flash_kind }}" data-testid="flash" role="status">{{ flash }}</p>
+{% endif %}
+{% if cart.item_count == 0 %}
+  <section class="card empty" data-testid="cart-empty">
+    <h2>Your cart is empty</h2>
+    <p>The shelf is still open.</p>
+    <a class="button" href="/catalog">Browse the catalog</a>
+  </section>
+{% else %}
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th scope="col">Item</th>
+        <th scope="col">Qty</th>
+        <th scope="col">Line</th>
+        <th scope="col"><span class="sr-only">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart["items"] %}
+        <tr data-testid="cart-item" data-product-id="{{ item.product_id }}">
+          <td data-testid="line-name">{{ item.name }}</td>
+          <td>
+            <form method="post" action="/cart/items/{{ item.product_id }}" class="inline-form">
+              <label class="sr-only" for="qty-{{ item.product_id }}">Quantity for {{ item.name }}</label>
+              <input id="qty-{{ item.product_id }}" type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10" data-testid="qty-{{ item.product_id }}">
+              <button type="submit" data-testid="update-{{ item.product_id }}">Update</button>
+            </form>
+          </td>
+          <td data-testid="line-total">{{ item.line_total }}</td>
+          <td>
+            <form method="post" action="/cart/items/{{ item.product_id }}/delete">
+              <button type="submit" class="text-button" data-testid="remove-{{ item.product_id }}">Remove</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="total">Total <strong data-testid="cart-total">{{ cart.total }}</strong></p>
+  <a class="button" href="/checkout" data-testid="checkout-link">Checkout</a>
+{% endif %}
+{% endblock %}

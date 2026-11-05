@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Delivery</p>
+  <h1>Checkout</h1>
+</section>
+{% if blocked %}
+  <section class="card empty" data-testid="checkout-blocked">
+    <h2>Nothing to check out</h2>
+    <p>Add something from the catalog first.</p>
+    <a class="button" href="/catalog">Back to the catalog</a>
+  </section>
+{% else %}
+  <div class="checkout-layout">
+    <form class="card form" method="post" action="/checkout">
+      {% for field, label in [
+        ("full_name", "Full name"),
+        ("email", "Email"),
+        ("address", "Street address"),
+        ("city", "City"),
+        ("postal_code", "Postal code")
+      ] %}
+        <label for="{{ field }}">{{ label }}</label>
+        <input id="{{ field }}" name="{{ field }}" value="{{ form[field] }}" data-testid="{{ field }}" {% if field == "full_name" %}autocomplete="name"{% elif field == "email" %}autocomplete="email"{% endif %}>
+        {% if errors.get(field) %}
+          <p class="field-error" data-testid="error-{{ field }}" role="alert">{{ errors[field] }}</p>
+        {% endif %}
+      {% endfor %}
+      <button type="submit" data-testid="checkout-submit">Place order</button>
+    </form>
+    <aside class="card summary">
+      <h2>Order summary</h2>
+      <ul>
+        {% for item in cart["items"] %}
+          <li>{{ item.name }} × {{ item.quantity }} <span>{{ item.line_total }}</span></li>
+        {% endfor %}
+      </ul>
+      <p class="total">Total <strong data-testid="checkout-total">{{ cart.total }}</strong></p>
+    </aside>
+  </div>
+{% endif %}
+{% endblock %}

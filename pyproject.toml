@@ -1,0 +1,19 @@
+[project]
+name = "harbor-qa"
+version = "1.0.0"
+description = "Self-hosted demo shop and a pytest + Playwright QA framework."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Alexandru Cojocari" }]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["demo_app", "qa_framework", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["demo_app", "qa_framework", "tests"]
